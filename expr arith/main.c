@@ -41,10 +41,8 @@ int valid_exp(char *exp) {
         return ((int) -1);
     if (!(*exp))
         return ((int) -1);
-    printf ("\n***** Validating *******\n");
     while (*exp) {
-        printf("\nvalue of exp : %s", exp);
-        printf("\nvalue of i : %d", i);
+
         if ((i++)%2) {
             test = is_opr(exp);
             if(test == -1) return ((int) -1);
@@ -56,7 +54,6 @@ int valid_exp(char *exp) {
             }
         }
     }
-    printf ("\n***** Validated successfully *******\n");
     return ((int) i);
 }
 
