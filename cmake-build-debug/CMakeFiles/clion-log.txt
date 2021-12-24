@@ -1,0 +1,4 @@
+"E:\Program Files\JetBrains\CLion 2021.2.2\bin\cmake\win\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug "-DCMAKE_MAKE_PROGRAM=E:/Program Files/JetBrains/CLion 2021.2.2/bin/ninja/win/ninja.exe" -G Ninja P:\Study\ILISI\S1\ALgo\practice
+-- Configuring done
+-- Generating done
+-- Build files have been written to: P:/Study/ILISI/S1/ALgo/practice/cmake-build-debug
