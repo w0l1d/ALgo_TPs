@@ -94,6 +94,7 @@ double *trans_exp_parts(char *exp, int *rst_size) {
 Node* trans_exptr_Arbre(double *exptr, int size) {
     int i, cpt, tmp,
         opr[2] = {0, 0};
+
     Node * ne = NULL;
     if (size == 1) {
         ne = create_NodePt(exptr[0], 0);
@@ -103,6 +104,7 @@ Node* trans_exptr_Arbre(double *exptr, int size) {
 
     for (i = 1; i < size-1; i +=2)
         opr[((exptr[i] == NS_val) || (exptr[i] == PS_val))?0:1]++;
+
     if (opr[0]) {
         tmp = (opr[0]+1)/2;
         cpt = 0;
@@ -118,7 +120,7 @@ Node* trans_exptr_Arbre(double *exptr, int size) {
         ne = create_NodePt(exptr[cpt], 1);
 
         ne->gch = trans_exptr_Arbre(exptr, cpt);
-        ne->drt = trans_exptr_Arbre(exptr+cpt+1, size-cpt);
+        ne->drt = trans_exptr_Arbre(exptr+cpt+1, size-cpt-1);
         return ((Node*) ne);
 
     } else if (opr[1]) {
@@ -134,8 +136,8 @@ Node* trans_exptr_Arbre(double *exptr, int size) {
             }
         }
         ne = create_NodePt(exptr[i], 1);
-        ne->gch = trans_exptr_Arbre(exptr, tmp-1);
-        ne->drt = trans_exptr_Arbre(exptr+i+1, tmp-1);
+        ne->gch = trans_exptr_Arbre(exptr, size/2);
+        ne->drt = trans_exptr_Arbre(exptr+cpt+1, size/2);
         return ((Node*) ne);
 
     }
@@ -148,24 +150,15 @@ Node* trans_exptr_Arbre(double *exptr, int size) {
 
 void main() {
     char exp[50];
-    int opts[4];
 
     printf("\nEntrer l'expression: ");
     scanf("%[^\n]s", exp);
 
-    int nbr_elem = valid_exp(exp);
+
 
     int tmp;
     double *exptr = trans_exp_parts(exp, &tmp);
-    printf("\nsize from trans : %d\n", tmp);
 
-    printf ("\n expression after : ");
-    for (int i = 0; i < tmp; ++i) {
-        if (i%2)
-            printf("%c", num_to_opr((int)exptr[i]));
-        else
-            printf("%lf", exptr[i]);
-    }
 
     printf("\n************\n");
 
@@ -175,8 +168,6 @@ void main() {
 
     affiche_infixer(node);
     printf("\nfin Trans to arbre\n");
-    printf("\n\nexpression math : %s", exp);
-    printf("\n\nValide num : %d", nbr_elem);
 
 
 }
