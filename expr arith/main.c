@@ -12,7 +12,7 @@
 
 
 
-int is_opr(const char *exp) {
+int is_oprator(const char *exp) {
     char c = exp[0];
     switch (c) {
         case PS: return((int) PS_val);
@@ -25,7 +25,7 @@ int is_opr(const char *exp) {
 
 
 
-char* is_num(char *exp, int *test) {
+char* is_float(char *exp, int *test) {
     double rst;
     exp = trans_CharToNum(exp, &rst, test);
     return ((char*) exp);
@@ -44,11 +44,11 @@ int valid_exp(char *exp) {
     while (*exp) {
 
         if ((i++)%2) {
-            test = is_opr(exp);
+            test = is_oprator(exp);
             if(test == -1) return ((int) -1);
             exp++;
         } else {
-            exp = is_num(exp, &test);
+            exp = is_float(exp, &test);
             if (!test) {
                 return ((int) -1);
             }
@@ -74,7 +74,7 @@ double *trans_exp_parts(char *exp, int *rst_size) {
 
     while (*exp) {
         if ((i++)%2) {
-            test = is_opr(exp);
+            test = is_oprator(exp);
             exptr[i-1] = test;
             exp++;
         } else {

@@ -18,14 +18,14 @@
 
 
 
-int is_Num(char ch) {
+int is_chiffre_num(char ch) {
     return ((int)
     ('0' <= ch) && (ch <= '9')
     );
 }
 
 int to_Num(char ch) {
-    if (is_Num(ch))
+    if (is_chiffre_num(ch))
         return ((int) ch - '0');
     return ((int) -1);
 }
@@ -45,7 +45,7 @@ int trait_sign(char **ch) {
 void trait_int(double *num, char **ch) {
     *num = 0;
     int tmp = 0;
-    while(is_Num(**ch))
+    while(is_chiffre_num(**ch))
     {
         (*num) = (*num)*10 + (double)to_Num(**ch);
         (*ch)++;
@@ -60,7 +60,7 @@ void trait_Point(char **ch) {
 
 void trait_reel(double *num, char **ch) {
     double pow = 1, reel;
-    while(is_Num(**ch)) {
+    while(is_chiffre_num(**ch)) {
         reel = ((double)to_Num(**ch)) * (pow /= 10);
         *num = (*num) + reel;
         (*ch)++;
@@ -75,7 +75,7 @@ char* trans_CharToNum(char *c, double *rst, int *test) {
     int signe;
 
     signe = trait_sign( &c);
-    if (!is_Num(*c) && *c != PT) {
+    if (!is_chiffre_num(*c) && *c != PT) {
         *test = 0;
         return ((char*) c);
     }
