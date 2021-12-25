@@ -96,8 +96,15 @@ double *trans_exp_parts(char *exp, int *rst_size) {
     while (*exp) {
         if ((i++)%2) {
             test = is_operator(*exp);
-            exptr[i-1] = test;
-            exp++;
+            if (test != NS_val) {
+                exp++;
+                exptr[i-1] = test;
+            } else {
+                exptr[i-1] = PS_val;
+                if (is_operator(*(exp+1)) == NS_val)
+                    exp+=2;
+            }
+
         } else {
             exp = trans_CharToNum(exp, &num, &test);
             exptr[i-1] = num;
@@ -202,10 +209,10 @@ double calc_arbre(Node *root) {
 
 
 void main() {
-    char exp[50] = "1+--5";
+    char exp[50];
 
-//    printf("\nEntrer l'expression: ");
-//    scanf("%[^\n]s", exp);
+    printf("\nEntrer l'expression: ");
+    scanf("%[^\n]s", exp);
 
 
 
