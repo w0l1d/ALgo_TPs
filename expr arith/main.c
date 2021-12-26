@@ -55,11 +55,16 @@ char* is_float(char *exp, int *test) {
 int valid_exp(char *exp) {
     int i = 0, test, tmp = 0;
 
-    if (!exp)      return ((int) -1);
-    if (!(*exp))   return ((int) -1);
+    if (!exp)      return ((int) -1); // expression n'existe pas
+    if (!(*exp))   return ((int) -1); // expression est vide
 
     while(*exp)
     {
+        //si le tete du chaine est un espace
+        if (*exp == BL) {
+            exp++;
+            continue;
+        }
         if ( (i++)%2 ) {
             test = is_operator(*exp);
             if(test == -1) return ((int) -1);
@@ -87,25 +92,33 @@ int valid_exp(char *exp) {
  * rang impair contient les operations
  */
 double *trans_exp_parts(char *exp, int *rst_size) {
-    int i = 0, test, size;
-    size = valid_exp(exp);
-    if (size == -1)  return ((double*) NULL);
-    *rst_size = size;
+    int i = 0, test;
+    *rst_size = valid_exp(exp);
+    // indique que l'expression est invalide
+    if ((*rst_size) == -1)  return ((double*) NULL);
 
-    double num, *exptr = (double*)malloc(sizeof(double) * size);
+
+    double num, *exptr = (double*)malloc(sizeof(double) * (*rst_size));
     while (*exp) {
-        if ((i++)%2) {
+        // espace est lu
+        if (*exp == BL) {
+            exp++;
+            continue;
+        }
+        if ((i++)%2) //traitement d'operateur
+        {
             test = is_operator(*exp);
             if (test != NS_val) {
                 exp++;
                 exptr[i-1] = test;
-            } else {
+            } else { //si l'operation est la soustraction a-b -> a+-b
                 exptr[i-1] = PS_val;
+                //si on a le cas a--b -> a+b
                 if (is_operator(*(exp+1)) == NS_val)
                     exp+=2;
             }
 
-        } else {
+        } else { //traitement d'operand
             exp = trans_CharToNum(exp, &num, &test);
             exptr[i-1] = num;
         }
@@ -132,10 +145,11 @@ Node* trans_exptr_Arbre(double *exptr, int size)
         opr[((exptr[i] == NS_val) || (exptr[i] == PS_val))?0:1]++;
 
     Node * ne = NULL;
-    if (opr[0])
+    if (opr[0]) //traitement des operation moins prioritaire +, -
     {
         tmp = (opr[0]+1)/2;
         cpt = 0;
+        //position de l'opration au milieu
         for (i = 1; i < size-1; i += 2)
         {
             if ((exptr[i] == NS_val) || (exptr[i] == PS_val))
@@ -148,11 +162,12 @@ Node* trans_exptr_Arbre(double *exptr, int size)
 
         ne->gch = trans_exptr_Arbre(exptr, cpt);
         ne->drt = trans_exptr_Arbre(exptr+cpt+1, size-cpt-1);
-    }
+    } //traitement des operation plus prioritaire *, /
     else if (opr[1])
     {
         tmp = (opr[1]+1)/2;
         cpt = 0;
+        //position de l'opration au milieu
         for (i = 1; i < size-1; i += 2)
         {
             if ((exptr[i] == MS_val) || (exptr[i] == DS_val))

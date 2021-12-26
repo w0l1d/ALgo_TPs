@@ -13,6 +13,8 @@
 #define DS '/'
 #define DS_val 3
 
+#define BL ' '
+
 #define PT '.' //signe point '.'
 
 
