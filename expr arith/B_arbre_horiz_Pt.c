@@ -8,28 +8,14 @@
 #include <math.h>
 
 
-    typedef struct Node {
-        unsigned type:1; // 0 pour operand, 1 pour operation
-        double info; //information du noeud
-        struct Node *drt; //pointeur sur le fils droit
-        struct Node *gch; //pointeur sur le fils gauche
-    }Node;
+
+typedef struct Node {
+    double info; //information du noeud
+    struct Node *drt; //pointeur sur le fils droit
+    struct Node *gch; //pointeur sur le fils gauche
+}Node;
 
 
-/*******************************************
- * traduit le code : l'operation --> symbole
- * @param op code de l'operation
- * @return characters correspond au op, ? sinon
- */
-char num_to_opr(const int op) {
-    switch (op) {
-        case PS_val: return((char) PS);
-        case NS_val: return((char) NS);
-        case MS_val: return((char) MS);
-        case DS_val: return((char) DS);
-    }
-    return ((char) '?');
-}
 
 
 //**********************************************************************************
@@ -48,7 +34,7 @@ char num_to_opr(const int op) {
      * @param type type du noeud
      * @return noeud cree
      */
-    Node* create_NodePt(double val, unsigned int type)
+    Node* create_NodePt(double val/*, unsigned int type*/)
     {
         Node *ne = (Node*) malloc(sizeof(Node));
         if (!ne)
@@ -58,7 +44,7 @@ char num_to_opr(const int op) {
         }
         ne->drt = ne->gch = NULL;
         ne->info = val;
-        ne->type = type;
+//        ne->type = type;
         return ((Node*) ne);
     }
 
@@ -75,10 +61,10 @@ void affiche_infixer(Node *root)
     if (!root)
         return;
     affiche_infixer(root->gch);
-    if (root->type == 0)
-        printf("%.0lf", root->info);
+    if (!(root->drt) && !(root->gch))
+        printf("%2.2lf", root->info);
     else
-        printf("%c", num_to_opr((int)root->info));
+        printf("%c", root->info);
     affiche_infixer(root->drt);
 }
 
@@ -141,9 +127,10 @@ void assign_val_to_Mtx(Node *root, double *matrice,
         return;
     *((matrice+(line*cols))+col) = root->info;
 
-    assign_val_to_Mtx(root->drt, matrice, cols, line + 1, col + ss, ss/2);
-    assign_val_to_Mtx(root->gch, matrice, cols, line + 1, col - ss, ss/2);
-
+    assign_val_to_Mtx(root->drt, matrice, cols,
+                      line + 1, col + ss, ss/2);
+    assign_val_to_Mtx(root->gch, matrice, cols,
+                      line + 1, col - ss, ss/2);
 }
 
 
@@ -169,15 +156,26 @@ void affiche_arbre_Real(Node *root) {
         for (int j = 0; j < segma; ++j)
             matrice[i][j] = -99;
 
-    assign_val_to_Mtx(root, pt, segma,  0, (segma/2), (segma/2+1)/2);
+    assign_val_to_Mtx(root, pt, segma,
+                      0, (segma/2), (segma/2+1)/2);
 
     printf("\n*******************************\n");
     for (int i = 0; i < prof; ++i) {
         for (int j = 0; j < segma; ++j) {
             if (matrice[i][j] == -99)
                 printf("    ");
-            else
-                printf("%2.1lf", matrice[i][j]);
+            else {
+                if (i == prof-1)
+                    printf("%02.2lf", matrice[i][j]);
+                else if(matrice[i+1][j-(int)pow(2, prof-i-2)] == -99
+                        &&
+                        matrice[i+1][j+((int)pow(2, prof-i-2))] == -99) {
+                    printf("%02.2lf", matrice[i][j]);
+                }
+                else {
+                    printf(" %c  ", (char)matrice[i][j]);
+                }
+            }
         }
         printf("\n");
     }

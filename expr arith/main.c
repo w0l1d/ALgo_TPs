@@ -19,10 +19,10 @@
  */
 int is_operator(const char c) {
     switch (c) {
-        case PS: return((int) PS_val);
-        case NS: return((int) NS_val);
-        case MS: return((int) MS_val);
-        case DS: return((int) DS_val);
+        case PS: return((int) PS);
+        case NS: return((int) NS);
+        case MS: return((int) MS);
+        case DS: return((int) DS);
     }
     return ((int) -1);
 }
@@ -108,13 +108,13 @@ double *trans_exp_parts(char *exp, int *rst_size) {
         if ((i++)%2) //traitement d'operateur
         {
             test = is_operator(*exp);
-            if (test != NS_val) {
+            if (test != NS) {
                 exp++;
                 exptr[i-1] = test;
             } else { //si l'operation est la soustraction a-b -> a+-b
-                exptr[i-1] = PS_val;
+                exptr[i-1] = PS;
                 //si on a le cas a--b -> a+b
-                if (is_operator(*(exp+1)) == NS_val)
+                if (is_operator(*(exp+1)) == NS)
                     exp+=2;
             }
 
@@ -138,11 +138,11 @@ Node* trans_exptr_Arbre(double *exptr, int size)
 {
     int i, cpt, tmp, opr[2] = {0, 0};
 
-    if (size == 1) return((Node*) create_NodePt(exptr[0], 0));
+    if (size == 1) return((Node*) create_NodePt(exptr[0]));
 
 
     for (i = 1; i < size-1; i +=2)
-        opr[((exptr[i] == NS_val) || (exptr[i] == PS_val))?0:1]++;
+        opr[((exptr[i] == NS) || (exptr[i] == PS))?0:1]++;
 
     Node * ne = NULL;
     if (opr[0]) //traitement des operation moins prioritaire +, -
@@ -152,31 +152,26 @@ Node* trans_exptr_Arbre(double *exptr, int size)
         //position de l'opration au milieu
         for (i = 1; i < size-1; i += 2)
         {
-            if ((exptr[i] == NS_val) || (exptr[i] == PS_val))
+            if ((exptr[i] == NS) || (exptr[i] == PS))
             {
                 cpt++;
                 if (cpt == tmp) { cpt = i; break; }
             }
         }
-        ne = create_NodePt(exptr[cpt], 1);
+        ne = create_NodePt(exptr[cpt]);
 
         ne->gch = trans_exptr_Arbre(exptr, cpt);
         ne->drt = trans_exptr_Arbre(exptr+cpt+1, size-cpt-1);
     } //traitement des operation plus prioritaire *, /
     else if (opr[1])
     {
-        tmp = (opr[1]+1)/2;
-        cpt = 0;
         //position de l'opration au milieu
         for (i = 1; i < size-1; i += 2)
         {
-            if ((exptr[i] == MS_val) || (exptr[i] == DS_val))
-            {
-                cpt++;
-                if (cpt == tmp) { cpt = i; break; }
-            }
+            if ((exptr[i] == MS) || (exptr[i] == DS))
+                cpt = i;
         }
-        ne = create_NodePt(exptr[cpt], 1);
+        ne = create_NodePt(exptr[cpt]);
 
         ne->gch = trans_exptr_Arbre(exptr, cpt);
         ne->drt = trans_exptr_Arbre(exptr+cpt+1, size-cpt-1);
@@ -195,10 +190,10 @@ Node* trans_exptr_Arbre(double *exptr, int size)
  */
 double calc_opr(double a, double b, int op) {
     switch(op) {
-        case PS_val: return ((double) a+b);
-        case NS_val: return ((double) a-b);
-        case MS_val: return ((double) a*b);
-        case DS_val: return ((double) a/b);
+        case PS: return ((double) a+b);
+        case NS: return ((double) a-b);
+        case MS: return ((double) a*b);
+        case DS: return ((double) a/b);
     }
     return ((double) 0);
 }
@@ -211,7 +206,7 @@ double calc_opr(double a, double b, int op) {
  */
 double calc_arbre(Node *root) {
     if (!root)   return ((double) 0);
-    if (root->type) {
+    if (root->drt) {
         double a = calc_arbre(root->gch),
                 b = calc_arbre(root->drt),
                 rst = calc_opr(a,b,(int)root->info);
@@ -223,18 +218,25 @@ double calc_arbre(Node *root) {
 
 
 
-void main() {
-    char exp[50];
+char* scan(char *string) {
+    int c; //as getchar() returns `int`
+    int i=0, max = 49;
 
-    printf("\nEntrer l'expression: ");
-    scanf("%[^\n]s", exp);
+    string = malloc(sizeof(char)*(max+1)); //allocating memory
+    while ((string[i++]= getchar()) != LB)
+        if (i-1 == max)
+            string = realloc(string, (max +=10)*sizeof(char)); //reallocating memory
+    string[i-1] = '\0';
+
+    return string;
+}
 
 
+void test1(char exp[]) {
 
-    int test, tmp;
-
-
-    printf("\n************\n");
+//    printf("\nEntrer l'expression: ");
+//    scanf("%[^\n]s", exp);
+    int tmp;
 
     printf("expression : %s\n", exp);
 
@@ -245,20 +247,27 @@ void main() {
         printf("\nError : Expression invalide\n");
         return;
     }
-    printf("\nTrans to arbre\n");
 
     Node* node = trans_exptr_Arbre(exptr,tmp);
 
-    printf("\nfin Trans to arbre11\n");
     affiche_infixer(node);
 
-
-    printf("\n\n");
-
     affiche_arbre_Real(node);
-    printf("\nfin Trans to arbre\n");
 
     rst = calc_arbre(node);
     printf("resultat de l'expression : %lf", rst);
+}
+
+void main() {
+
+    printf("\n\n*****************************************************************");
+    printf("\nTest 1 :\n");
+    test1("-3.0+-5.2+4.0/3.2*-3.8-5.0");
+    printf("\n\n*****************************************************************");
+    printf("\nTest 2 :\n");
+    test1("-3.0+-5.2+4.0*3.2+3.8/5.0");
+    printf("\n\n*****************************************************************");
+    printf("\nTest 3 :\n");
+    test1("-3.0+-5.2+4.0+3.2+3.8+5.0");
 
 }

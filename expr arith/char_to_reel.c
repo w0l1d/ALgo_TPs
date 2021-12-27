@@ -5,16 +5,12 @@
 #include<stdlib.h>
 
 #define PS '+'
-#define PS_val 0
 #define NS '-'
-#define NS_val 1
 #define MS '*'
-#define MS_val 2
 #define DS '/'
-#define DS_val 3
 
 #define BL ' '
-
+#define LB '\n'
 #define PT '.' //signe point '.'
 
 
