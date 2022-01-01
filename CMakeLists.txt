@@ -4,4 +4,4 @@ project(practice)
 set(CMAKE_CXX_STANDARD 14)
 
 add_executable(practice
-        "expr arith/main.c")
+        sorts/Heap_PSort.c)
