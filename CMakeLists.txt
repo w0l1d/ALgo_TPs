@@ -4,4 +4,4 @@ project(practice)
 set(CMAKE_CXX_STANDARD 14)
 
 add_executable(practice
-        sorts/Heap_PSort.c)
+        sorts/quick_PSort.c)
