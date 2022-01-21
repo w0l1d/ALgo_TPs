@@ -79,7 +79,7 @@ void aff_List2(Cellule *list, int n) {
 // To tExtracte a subtree rooted with node i which is
 // an index in arr[]. n is size of heap
 /*******
- *
+ * creer un max-heap: arbre dont la chaque noeud est superieur a ses fils
  * @param list
  * @param n
  * @param i
@@ -90,8 +90,6 @@ void lExtracte(Cellule *list, int n, int i) {
            n, i);
     structur(list, 0, 1, n);
     printf("*****************\n");
-
-
 
     int largest = i; // Initialize largest as root
     int l = 2 * i; // left = 2*i
@@ -174,11 +172,11 @@ Cellule *createCel(int val) {
 Cellule *insert_arrayToList(Cellule *list, int *array,unsigned int n) {
 
     // si le tableau des valeur est vide
-    if (!n)     return ((Cellule*) list);
+    if (!n)  return ((Cellule*) list);
 
     int i = 0;
-    if (!list)
-        list = createCel(array[i++]);
+    //initilaiser la liste si elle est vide
+    list = (!list)? createCel(array[i++]):list;
 
     Cellule *curr = list;
 
@@ -186,7 +184,7 @@ Cellule *insert_arrayToList(Cellule *list, int *array,unsigned int n) {
     while(curr->svt)     curr=curr->svt;
 
 
-
+    //inserer chaque element en queue
     for (; i < n; ++i) {
         curr->svt = createCel(array[i]);
         curr = curr->svt;
@@ -196,8 +194,8 @@ Cellule *insert_arrayToList(Cellule *list, int *array,unsigned int n) {
 
 
 void main() {
-    int n = 96;
-    int arr[96] = {5,9,1,3,7,0,4, 8,
+    int n = 8;
+    int arr[8] = {5,9,1,3,7,0,4, 8/*,
                    1,7, 6, 5, 6, 3, 7, 0,
                    1,7, 6, 5, 6, 3, 7, 0,
                    1,7, 6, 5, 6, 3, 7, 0,
@@ -208,7 +206,7 @@ void main() {
                    1,7, 6, 5, 6, 3, 7, 0,
                    1,7, 6, 5, 6, 3, 7, 0,
                    1,7, 6, 5, 6, 3, 7, 0,
-                   1,7, 6, 5, 6, 3, 7, 0};
+                   1,7, 6, 5, 6, 3, 7, 0*/};
 
 
     Cellule *list = NULL;

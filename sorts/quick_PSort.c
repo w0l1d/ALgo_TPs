@@ -7,18 +7,11 @@
 #include <time.h>
 
 
-
-
 typedef struct cel {
     int val;
     struct cel *svt;
 }Cellule;
 
-
-typedef struct flist {
-    Cellule *first;
-    Cellule *last;
-}FList;
 
 Cellule * getCel(Cellule *list, int pos) {
     while (list) {
@@ -56,16 +49,14 @@ Cellule *insert_arrayToList(Cellule *list, int *array, unsigned int n) {
     if (!n)     return ((Cellule*) list);
 
     int i = 0;
-    if (!list)
-        list = createCel(array[i++]);
+    //initialiser la liste si elle est vide
+    list = (list)? list : createCel(array[i++]);
 
     Cellule *curr = list;
-
-    //deplacer a la fin de la liste pour inserer en queue
+    //deplacer vers la fin de la liste
     while(curr->svt)     curr=curr->svt;
 
-
-
+    //inserer les element a la fin de la liste
     for (; i < n; ++i) {
         curr->svt = createCel(array[i]);
         curr = curr->svt;
@@ -75,6 +66,17 @@ Cellule *insert_arrayToList(Cellule *list, int *array, unsigned int n) {
 
 
 
+void aff_List(Cellule *list) {
+    //Tableau n'existe pas
+    if (!list) printf("\nListe est vide\n");
+
+    printf("\n");
+    while (list) {
+        printf("%d  ", list->val);
+        list = list->svt;
+    }
+    printf("\n");
+}
 
 
 /**********************************************************************
@@ -149,34 +151,27 @@ Cellule* partition_PRapide(Cellule *list, Cellule *pivot)
     return ((Cellule*) l1);
 }
 
-/* The main function that implements QuickSort
-arr[] --> Array to be sorted,
-low --> Starting index,
-high --> Ending index */
+
+
+/*********************************************************
+ * la fonction principal du trie rapide
+ * @param list la liste a trier
+ * @return liste triee
+ */
 Cellule* tri_PRapide(Cellule* list)
 {
-    if (list)
-    {
-        /* pi is partitioning index, arr[p] is now
-        at right place */
-        Cellule *tmp = list->svt;
-        list->svt = NULL;
-        list = partition_PRapide(tmp, list);
-    }
-    return ((Cellule*) list);
+    if (!list)
+        goto end_tri_PRapide;
+
+    /* pi is partitioning index, arr[p] is now
+    at right place */
+    Cellule *tmp = list->svt;
+    list->svt = NULL;
+    list = partition_PRapide(tmp, list);
+
+    end_tri_PRapide: return ((Cellule*) list);
 }
 
-void aff_List(Cellule *list) {
-    //Tableau n'existe pas
-    if (!list) printf("\nListe est vide\n");
-
-    printf("\n");
-    while (list) {
-        printf("%d  ", list->val);
-        list = list->svt;
-    }
-    printf("\n");
-}
 void main() {
     int n = 8;
     int arr[8] = {5,9,1,3,7,0,4, 8,};

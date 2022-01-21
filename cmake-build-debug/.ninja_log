@@ -1,20 +1,12 @@
 # ninja log v5
 6	408	6617115500190067	CMakeFiles/practice.dir/calendrier/calendier.c.obj	92bdc6d2c89c36ec
-837	2241	6628363389313587	practice.exe	26265f9a1cd7cc02
+649	2222	6629133506755177	practice.exe	4a15a8783aa707f4
 0	397	6616413057948695	CMakeFiles/practice.dir/calendrier/date_khaoula.cpp.obj	c4a6d7b075e48391
 133	877	6623296590995836	CMakeFiles/practice.dir/expr_arith/main.c.obj	91d1e35f5db05eb0
 0	375	6627611205535187	CMakeFiles/practice.dir/sorts/Heap_TSort.c.obj	528777cbfa399059
 125	616	6626708180912184	CMakeFiles/practice.dir/sorts/Heap_Sort.c.obj	f53c31e15e6b7388
-67	634	6628153036041300	CMakeFiles/practice.dir/sorts/Heap_PSort.c.obj	eb29ad76f8a89a8a
-3	660	6628363454465121	build.ninja	1a50abc95e48b890
-141	834	6628363375408352	CMakeFiles/practice.dir/sorts/quick_TSort.c.obj	8db8349b94e1a54
-0	457	6628363466393881	CMakeFiles/practice.dir/sorts/quick_PSort.c.obj	7a8b3187a3d6a44c
-476	1217	6628363473893318	practice.exe	9e8da26c0a0f3e1f
-114	491	6628364509515165	CMakeFiles/practice.dir/sorts/quick_PSort.c.obj	7a8b3187a3d6a44c
-493	1211	6628364516545782	practice.exe	9e8da26c0a0f3e1f
-176	569	6628375111958392	CMakeFiles/practice.dir/sorts/quick_PSort.c.obj	7a8b3187a3d6a44c
-571	1585	6628375121851902	practice.exe	9e8da26c0a0f3e1f
-147	563	6628375808898652	CMakeFiles/practice.dir/sorts/quick_PSort.c.obj	7a8b3187a3d6a44c
-564	1443	6628375817335573	practice.exe	9e8da26c0a0f3e1f
+5	647	6629133491131167	CMakeFiles/practice.dir/sorts/Heap_PSort.c.obj	eb29ad76f8a89a8a
+3	660	6644777738828710	build.ninja	1a50abc95e48b890
+3	378	6628569311983212	CMakeFiles/practice.dir/sorts/quick_TSort.c.obj	8db8349b94e1a54
 154	539	6628376507656424	CMakeFiles/practice.dir/sorts/quick_PSort.c.obj	7a8b3187a3d6a44c
-541	1208	6628376514105147	practice.exe	9e8da26c0a0f3e1f
+103	564	6628525166913412	CMakeFiles/practice.dir/sorts/by_khaoula/quicksort.c.obj	8f7950e8461bcd72

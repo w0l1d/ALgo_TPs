@@ -4,4 +4,4 @@ project(practice)
 set(CMAKE_CXX_STANDARD 14)
 
 add_executable(practice
-        sorts/quick_PSort.c)
+        "sorts/Heap_PSort.c" "ILISI Managment/structures.h")

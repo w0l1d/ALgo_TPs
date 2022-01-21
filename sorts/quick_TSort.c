@@ -40,6 +40,11 @@ void aff_Array(int *arr, int n)
 int partition_TRapide(int *arr, int low, int high)
 {
     int pivot = arr[high]; // pivot
+
+    printf("\nDEBUT partition : ");
+    printf("\npivot = %d, debut = %d, fin = %d", pivot, low, high);
+    aff_Array(arr, high+1);
+
     // indice du petit element et indique la position correct du pivot
     int i = (low - 1);
     for (int j = low; j <= high - 1; j++)
@@ -52,25 +57,43 @@ int partition_TRapide(int *arr, int low, int high)
         }
     }
     xchange(arr + i + 1, arr + high);
+
+    printf("\nFIN partition : ");
+    printf("\npivot = %d", i+1);
+    aff_Array(arr, high+1);
+
     return (i + 1);
 }
 
-/* The main function that implements QuickSort
-arr[] --> Array to be sorted,
-low --> Starting index,
-high --> Ending index */
+
+/**********************************************************************
+ * la fonction principal du trie rapide
+ * @param arr tableau des element a trie
+ * @param low indice du premier du element
+ * @param high indice du dernier du element
+ * @return rien
+ */
 void tri_TRapide(int *arr, int low, int high)
 {
     if (low < high)
     {
-        /* pi is partitioning index, arr[p] is now
-        at right place */
+
+        printf("\nDEBUT fonction principal TRapide()\n");
+        printf("debut = %d, fin = %d\n", low, high);
+        aff_Array(arr, high+1);
+
+        //pi est l'indice du pivot
+        // arr[pi] est dans l'emplacement correct
         int pi = partition_TRapide(arr, low, high);
 
-        // Separately sort elements before
-        // partition and after partition
+        // trie separement les elements
         tri_TRapide(arr, low, pi - 1);
         tri_TRapide(arr, pi + 1, high);
+
+        printf("\nFIN fonction principal TRapide()\n");
+        printf("debut = %d, fin = %d", low, high);
+        aff_Array(arr, high+1);
+
     }
 }
 
@@ -91,24 +114,15 @@ void main() {
                    1,7, 6, 5, 6, 3, 7, 0};
 
 
-
-    clock_t t;
-    t = clock();
-
-
     clock_t tic = clock();
 
     tri_TRapide(arr, 0, n-1);
 
     clock_t toc = clock();
 
-    printf("Elapsed: %f seconds\n\n", (double)(toc - tic) / CLOCKS_PER_SEC);
+    printf("\n\nElapsed: %f seconds\n\n", (double)(toc - tic) / CLOCKS_PER_SEC);
 
-    aff_Array(arr, n);
-//    t = clock() - t;
-//    double time_taken = ((double)t)/CLOCKS_PER_SEC; // in seconds
-//
-//    printf("\n\ntime token %f, %ld.\n", time_taken, t);
+
 
 }
 
