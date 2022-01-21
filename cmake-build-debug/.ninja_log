@@ -6,7 +6,7 @@
 0	375	6627611205535187	CMakeFiles/practice.dir/sorts/Heap_TSort.c.obj	528777cbfa399059
 125	616	6626708180912184	CMakeFiles/practice.dir/sorts/Heap_Sort.c.obj	f53c31e15e6b7388
 5	647	6629133491131167	CMakeFiles/practice.dir/sorts/Heap_PSort.c.obj	eb29ad76f8a89a8a
-3	660	6644777738828710	build.ninja	1a50abc95e48b890
+3	660	6644934145941839	build.ninja	1a50abc95e48b890
 3	378	6628569311983212	CMakeFiles/practice.dir/sorts/quick_TSort.c.obj	8db8349b94e1a54
 154	539	6628376507656424	CMakeFiles/practice.dir/sorts/quick_PSort.c.obj	7a8b3187a3d6a44c
 103	564	6628525166913412	CMakeFiles/practice.dir/sorts/by_khaoula/quicksort.c.obj	8f7950e8461bcd72

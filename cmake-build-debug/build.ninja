@@ -66,6 +66,18 @@ build CMakeFiles/practice.dir/sorts/Heap_PSort.c.obj: C_COMPILER__practice_Debug
   OBJECT_DIR = CMakeFiles\practice.dir
   OBJECT_FILE_DIR = CMakeFiles\practice.dir\sorts
 
+build CMakeFiles/practice.dir/ILISI_Managment/FILE_MANAGMENT.c.obj: C_COMPILER__practice_Debug P$:/Study/ILISI/S1/ALgo/practice/ILISI$ Managment/FILE_MANAGMENT.c || cmake_object_order_depends_target_practice
+  DEP_FILE = CMakeFiles\practice.dir\ILISI_Managment\FILE_MANAGMENT.c.obj.d
+  FLAGS = -g
+  OBJECT_DIR = CMakeFiles\practice.dir
+  OBJECT_FILE_DIR = CMakeFiles\practice.dir\ILISI_Managment
+
+build CMakeFiles/practice.dir/ILISI_Managment/Student_Managment.c.obj: C_COMPILER__practice_Debug P$:/Study/ILISI/S1/ALgo/practice/ILISI$ Managment/Student_Managment.c || cmake_object_order_depends_target_practice
+  DEP_FILE = CMakeFiles\practice.dir\ILISI_Managment\Student_Managment.c.obj.d
+  FLAGS = -g
+  OBJECT_DIR = CMakeFiles\practice.dir
+  OBJECT_FILE_DIR = CMakeFiles\practice.dir\ILISI_Managment
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target practice
@@ -74,7 +86,7 @@ build CMakeFiles/practice.dir/sorts/Heap_PSort.c.obj: C_COMPILER__practice_Debug
 #############################################
 # Link the executable practice.exe
 
-build practice.exe: C_EXECUTABLE_LINKER__practice_Debug CMakeFiles/practice.dir/sorts/Heap_PSort.c.obj
+build practice.exe: C_EXECUTABLE_LINKER__practice_Debug CMakeFiles/practice.dir/sorts/Heap_PSort.c.obj CMakeFiles/practice.dir/ILISI_Managment/FILE_MANAGMENT.c.obj CMakeFiles/practice.dir/ILISI_Managment/Student_Managment.c.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\practice.dir
