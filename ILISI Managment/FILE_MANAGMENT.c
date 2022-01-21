@@ -13,13 +13,11 @@ void readModules(FILE *f) {
     char str[100], c;
 
     while((c=(char)fgetc(f))!=EOF) {
-
         if (c == DELIM) {
             str[modsize] = '\0';
             i = modIndex/16;
             j = modIndex%16;
-            if ((i > 2) || (j > 15))
-            {
+            if ((i > 2) || (j > 15)) {
                 printf("\n\nerreur les modules stockes depasse le nombre predefini\n");
                 printf("\ni = %d, j =%d\n", i, j);
                 exit(0);

@@ -18,14 +18,14 @@ unsigned char *modules[3][16];
 const char STUDENT_PATTERN[] = "%30[^;]s;%30[^;]s;"
                                "%8[A-Za-z0-9]s;%10[A-Za-z0-9]s;"
                                "%d;%d;%d;%d;%d\n";
-const char NOTE_PATTERN[] = "%f,%f;";
+const char NOTE_PATTERN[] = "%f;%f;";
 
 
 typedef struct {
-    unsigned char *nom;
-    unsigned char *prenom;
-    unsigned char *cin; //format XY123456\0
-    unsigned char *cne; //format X123456789\0
+    unsigned char *nom; // max 30
+    unsigned char *prenom; // max 30
+    unsigned char *cin; //max 8, format XY123456\0
+    unsigned char *cne; //max 10, format X123456789\0
     Date naiss;
     unsigned reserve:3;
     unsigned annee_univ:3;
@@ -33,13 +33,14 @@ typedef struct {
 
 
 typedef struct nt {
-    unsigned val:5;
-    struct nt *rat;
+    float normal;
+    float ratt;
 }Note;
 
-typedef struct {
-    unsigned char student;
+typedef struct ds {
+    Student *student;
     Note *notes[4][16];
+    struct ds *svt;
 }Dossier;
 
 
