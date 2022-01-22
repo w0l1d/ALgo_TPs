@@ -31,23 +31,25 @@ Note *init_Note(float normal, float ratt) {
 }
 
 Student* readStudent(FILE *fl) {
-    Student *stud = (Student*) malloc(sizeof(Student));
-    char nom[25],prenom[30], cin[15], cne[15];
+    Student *stud = NULL;
+    char nom[30],prenom[30], cin[15], cne[15];
     unsigned int day, month, year, res, an_unv;
-    fscanf(fl, STUDENT_PATTERN,
+    int rst = fscanf(fl, STUDENT_PATTERN,
            nom, prenom, cin, cne, &day,
            &month, &year,
            &res, &an_unv);
-    stud->nom =(unsigned char*) strdup(nom);
-    stud->prenom =(unsigned char*) strdup(prenom);
-    stud->cin =(unsigned char*) strdup(cin);
-    stud->cne =(unsigned char*) strdup(cne);
-    stud->naiss.day = day;
-    stud->naiss.month = month;
-    stud->naiss.year = year;
-    stud->reserve = res;
-    stud->annee_univ = an_unv;
-
+    if (rst != EOF) {
+        stud = (Student*) malloc(sizeof(Student));
+        stud->nom = (char *) strdup(nom);
+        stud->prenom = (char *) strdup(prenom);
+        stud->cin = (char *) strdup(cin);
+        stud->cne = (char *) strdup(cne);
+        stud->naiss.day = day;
+        stud->naiss.month = month;
+        stud->naiss.year = year;
+        stud->reserve = res;
+        stud->annee_univ = an_unv;
+    }
     return ((Student*)stud);
 }
 
@@ -73,3 +75,30 @@ Dossier *readDossier(FILE *fl) {
     return ((Dossier*) ds);
 }
 
+
+void readModules(FILE *f) {
+
+    int modIndex = 0, modsize = 0;
+    int i,j;
+    char str[100], c;
+
+    while((c=(char)fgetc(f))!=EOF) {
+
+        if (c == DELIM) {
+            str[modsize] = '\0';
+            i = modIndex/16;
+            j = modIndex%16;
+            if ((i > 2) || (j > 15)) {
+                printf("\n\nerreur les modules stockes depasse le nombre predefini\n");
+                printf("\ni = %d, j =%d\n", i, j);
+                exit(0);
+            }
+            modules[i][j] =(char *) strdup(str);
+            modIndex++;
+            modsize = 0;
+            continue;
+        }
+        str[modsize] = c;
+        modsize++;
+    }
+}
