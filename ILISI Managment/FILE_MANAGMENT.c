@@ -20,14 +20,36 @@ void print_student(Student *std) {
 }
 
 
+void print_dossier(Dossier *doss) {
+    printf("\nDossier info \n");
+    print_student(doss->student);
+    int i,j,nbr_annee;
+    nbr_annee = doss->student->annee_univ;
+    nbr_annee += doss->student->reserve?1:0;
+    for (i = 0; i < nbr_annee; ++i) {
+        printf("Annee %d\n",i+1);
+        show_notes:
+        for (j = 0; j < 16; ++j) {
+            printf("[%d]=%f", j+1, doss->notes[i][j]->normal);
+            if (doss->notes[i][j]->normal < 12)
+                printf("|%f", doss->notes[i][j]->ratt);
+            printf("  ");
+        }
+        printf("\n");
+        if (doss->student->reserve-1 == i) {
+            printf("Annee %i de reserve\n",++i);
+            goto show_notes;
+        }
+    }
+}
 int main() {
     FILE *f;
     f=fopen("P:\\Study\\ILISI\\S1\\ALgo\\practice\\ILISI Managment\\students.txt","r");
+    Dossier *doss;
 
-    Student *std;
+    while ((doss = readDossier(f)) != NULL) {
+        print_dossier(doss);
 
-    while ((std = readStudent(f)) != NULL) {
-        print_student(std);
     }
     fclose(f);
     return 0;

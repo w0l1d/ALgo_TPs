@@ -16,6 +16,7 @@ Dossier *initDossier(Student *st) {
         exit(-1);
     }
     ds->student = st;
+    ds->svt = NULL;
     return ((Dossier*)ds);
 }
 
@@ -38,28 +39,33 @@ Student* readStudent(FILE *fl) {
            nom, prenom, cin, cne, &day,
            &month, &year,
            &res, &an_unv);
-    if (rst != EOF) {
-        stud = (Student*) malloc(sizeof(Student));
-        stud->nom = (char *) strdup(nom);
-        stud->prenom = (char *) strdup(prenom);
-        stud->cin = (char *) strdup(cin);
-        stud->cne = (char *) strdup(cne);
-        stud->naiss.day = day;
-        stud->naiss.month = month;
-        stud->naiss.year = year;
-        stud->reserve = res;
-        stud->annee_univ = an_unv;
-    }
+
+    if (rst == EOF)
+        return ((Student*) NULL);
+
+    stud = (Student*) malloc(sizeof(Student));
+    stud->nom = (char *) strdup(nom);
+    stud->prenom = (char *) strdup(prenom);
+    stud->cin = (char *) strdup(cin);
+    stud->cne = (char *) strdup(cne);
+    stud->naiss.day = day;
+    stud->naiss.month = month;
+    stud->naiss.year = year;
+    stud->reserve = res;
+    stud->annee_univ = an_unv;
+
     return ((Student*)stud);
 }
 
 Dossier *readDossier(FILE *fl) {
     Student *stud = readStudent(fl);
+    if (!stud)
+        return ((Dossier*) NULL);
     Dossier *ds = initDossier(stud);
     int ind = 0, //index to current Note
     i, j;
     float n1, n2; // n1->note normal; n2->note du rattrapage
-    int nbr_notes = 16*3;
+    int nbr_notes = 16 * stud->annee_univ;
     if (stud->reserve) nbr_notes+=16;
     while(ind < nbr_notes) {
         fscanf(fl, "%f;",&n1);
@@ -72,6 +78,7 @@ Dossier *readDossier(FILE *fl) {
         ds->notes[i][j] = init_Note(n1, n2);
         ind++;
     }
+    fscanf(fl, "%*[\n];");
     return ((Dossier*) ds);
 }
 
