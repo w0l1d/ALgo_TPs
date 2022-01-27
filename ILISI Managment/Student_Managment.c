@@ -28,10 +28,18 @@ Dossier *insertDossier(Dossier *list, Dossier *ds) {
         return ((Dossier*) ds);
     // X est l'etudiant a insere
     // U est l'etudiant en tete de la liste
-    if(((getMoyenne(ds) > getMoyenne(list)) && A_Reussi(ds)) // si X a reussi et il a une moyenne > Y
-    || (!A_Reussi(list) && A_Reussi(ds)) // si X a reussi et Y non
-       || (!A_Reussi(ds) && !A_Reussi(list) && (getMoyenne(ds) >= 12) && (getMoyenne(list) < 12))
-          || (!A_Reussi(ds) && !A_Reussi(list) && (getMoyenne(ds) >= 12) && (getMoyenne(list) >= 12) && !ds->inf10))
+//    if(((getMoyenne(ds) > getMoyenne(list)) && A_Reussi(ds)) // si X a reussi et il a une moyenne > Y
+//    || (!A_Reussi(list) && A_Reussi(ds)) // si X a reussi et Y non
+//       || (!A_Reussi(ds) && !A_Reussi(list) && (getMoyenne(ds) >= 12) && (getMoyenne(list) < 12))
+//          || (!A_Reussi(ds) && !A_Reussi(list) && (getMoyenne(ds) >= 12) && (getMoyenne(list) >= 12) && !ds->inf10))
+    if(
+            (A_Reussi(ds) && ((getMoyenne(ds) > getMoyenne(list)) || !A_Reussi(list)))
+       || (!A_Reussi(ds)
+            && !A_Reussi(list)
+            && (getMoyenne(ds) >= 12)
+            && ((getMoyenne(list) < 12)) || ((getMoyenne(list) >= 12) && !ds->inf10)
+            )
+            )
     {
 
         ds->svt = list;
