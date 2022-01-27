@@ -45,10 +45,8 @@ int main() {
     f=fopen("P:\\Study\\ILISI\\S1\\ALgo\\practice\\ILISI Managment\\students.txt","r");
     Dossier *doss;
 
-    while ((doss = readDossier(f)) != NULL) {
+    while ((doss = readDossier(f)))
         print_dossier(doss);
-
-    }
     fclose(f);
     return 0;
 }
