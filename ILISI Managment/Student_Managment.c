@@ -15,7 +15,7 @@ float getMoyenne(Dossier *ds) {
     nbr_annee = ds->student->annee_univ;
     nbr_annee += (ds->student->reserve)?1:0;
 
-    return ((float) ds->moy[nbr_annee]);
+    return ((float) ds->moy[nbr_annee-1]);
 }
 
 int A_Reussi(Dossier *ds) {
@@ -151,7 +151,7 @@ void orgDossiers(FILE *f, Dossier *ds[3]) {
     Dossier *tmp;
 
     while ((tmp = readDossier(f)))
-        ds[tmp->student->annee_univ] = insertDossier(ds[tmp->student->annee_univ], tmp);
+        ds[tmp->student->annee_univ-1] = insertDossier(ds[tmp->student->annee_univ-1], tmp);
 }
 
 
