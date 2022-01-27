@@ -14,7 +14,7 @@ float getMoyenne(Dossier *ds) {
     float moy = 0;
     int nbr_annee;
     nbr_annee = ds->student->annee_univ;
-    nbr_annee += (stud->reserve)?1:0;
+    nbr_annee += (ds->student->reserve)?1:0;
     switch(nbr_annee) {
         case 4: moy += ds->moy[3];
         case 3: moy += ds->moy[2];
