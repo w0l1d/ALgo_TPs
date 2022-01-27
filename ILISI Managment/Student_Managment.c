@@ -11,27 +11,32 @@
 #define max(a,b) ( (a > b) ? (a) : (b))
 
 float getMoyenne(Dossier *ds) {
-    float moy = 0;
     int nbr_annee;
     nbr_annee = ds->student->annee_univ;
     nbr_annee += (ds->student->reserve)?1:0;
-    switch(nbr_annee) {
-        case 4: moy += ds->moy[3];
-        case 3: moy += ds->moy[2];
-        case 2: moy += ds->moy[1];
-        case 1: moy += ds->moy[0];
-    }
-    moy /= nbr_annee;
-    return ((float) moy);
+
+    return ((float) ds->moy[nbr_annee]);
+}
+
+int A_Reussi(Dossier *ds) {
+    return (ds->inf12 < 4) && !(ds->inf10) && (getMoyenne(ds) > 12);
 }
 
 
 Dossier *insertDossier(Dossier *list, Dossier *ds) {
     if (!list)
         return ((Dossier*) ds);
-    if(getMoyenne(ds) > getMoyenne(list)) {
+    // X est l'etudiant a insere
+    // U est l'etudiant en tete de la liste
+    if(((getMoyenne(ds) > getMoyenne(list)) && A_Reussi(ds)) // si X a reussi et il a une moyenne > Y
+    || (!A_Reussi(list) && A_Reussi(ds)) // si X a reussi et Y non
+       || (!A_Reussi(ds) && !A_Reussi(list) && (getMoyenne(ds) >= 12) && (getMoyenne(list) < 12))
+          || (!A_Reussi(ds) && !A_Reussi(list) && (getMoyenne(ds) >= 12) && (getMoyenne(list) >= 12) && !ds->inf10))
+    {
+
         ds->svt = list;
-        return ((Dossier*) ds);
+        return ((Dossier *) ds);
+
     }
     list->svt = insertDossier(list->svt, ds);
     return ((Dossier*) list);
@@ -120,7 +125,6 @@ Dossier *readDossier(FILE *fl) {
 
             fscanf(fl, "%f;", &note);
 
-
             i = ind / 16; // line index // annee du note
             j = ind % 16; // column index // module du note
             ds->notes[i][j] = note;
@@ -169,4 +173,21 @@ void readModules(FILE *f) {
         str[modsize] = c;
         modsize++;
     }
+}
+
+
+void Menu() {
+    printf(
+            "\n******************************************\n"
+            "***********Statistiques Menu**************\n"
+            "******************************************\n"
+            "1-> tous les etudiants"
+            "2-> les etudiant ayant reussi"
+            "3-> les etudiant ayant des notes entre 10 et 12"
+            "4-> les etudiant ayant des notes < 10"
+            "5-> les etudiant n'ayant pas des notes < 10, mais ont echoues"
+            );
+
+
+
 }
