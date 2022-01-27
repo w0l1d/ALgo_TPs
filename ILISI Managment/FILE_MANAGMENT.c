@@ -28,9 +28,7 @@ void print_dossier(Dossier *doss) {
         printf("Annee %d\n",i+1);
         show_notes:
         for (j = 0; j < 16; ++j) {
-            printf("[%d]=%f", j+1, doss->notes[i][j]->normal);
-            if (doss->notes[i][j]->normal < 12)
-                printf("|%f", doss->notes[i][j]->ratt);
+            printf("[%d]=%f", j+1, doss->notes[i][j]);
             printf("  ");
         }
         printf("\n");

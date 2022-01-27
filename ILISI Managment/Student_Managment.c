@@ -52,14 +52,13 @@ Dossier *initDossier(Student *st) {
     return ((Dossier*)ds);
 }
 
-Note *init_Note(float normal, float ratt) {
+Note *init_Note(float normal) {
     Note *nt = (Note*) malloc(sizeof(Note));
     if (!nt) {
         printf(ERROR_ALL_MEM_NOTE);
         exit(-1);
     }
     nt->normal = normal;
-    nt->ratt = ratt;
     return ((Note*) nt);
 }
 
@@ -102,32 +101,36 @@ Dossier *readDossier(FILE *fl) {
         return ((Dossier*) NULL);
     Dossier *ds = initDossier(stud);
     int ind, //index to current Note
-    ind2 = 0,
+    ind2 = 0, // indique l'annee actuel
     i, j;
-    float n1, n2, moyen; // n1->note normal; n2->note du rattrapage
-    int nbr_notes = stud->annee_univ;
-    nbr_notes += (stud->reserve)?1:0;
-    read_notes:
-    moyen = ind = 0;
-    while(ind < 16) {
-        fscanf(fl, "%f;",&n1);
-        (n1 < 12)?
-            fscanf(fl, "%f;",&n2)
-            :
-            (n2 = 0);
-        i = ind / 16; // line index
-        j = ind % 16; // column index
-        ds->notes[i][j] = init_Note(n1, n2);
-        moyen += max(n1, n2);
-        ind++;
-    }
-    moyen /= 16;
-    nbr_notes--;
-    ds->moy[ind2++] = moyen;
+    float note, moyen; // n1->note normal; n2->note du rattrapage
+    int nbr_annee = stud->annee_univ;
+    nbr_annee += (stud->reserve)?1:0;
+    do {
+        moyen = 0;
+        for (ind = 0; ind < 16; ind++) {
+            //statistique des notes seuelement pour la dernier annees
+            if (nbr_annee == 1)
+                if (note < 12) {
+                    if (note < 10)
+                        ds->inf10 = 1;
+                    else
+                        ds->inf12++;
+                }
 
-    fscanf(fl, "%*[\n];");
-    if (nbr_notes)
-        goto read_notes;
+            fscanf(fl, "%f;", &note);
+
+
+            i = ind / 16; // line index // annee du note
+            j = ind % 16; // column index // module du note
+            ds->notes[i][j] = note;
+            moyen += note;
+        }
+        moyen /= 16;
+        ds->moy[ind2++] = moyen;
+
+        fscanf(fl, "%*[\n];");
+    } while(--nbr_annee);
 
     return ((Dossier*) ds);
 }

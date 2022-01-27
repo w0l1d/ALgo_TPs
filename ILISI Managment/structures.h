@@ -36,13 +36,14 @@ typedef struct {
 
 typedef struct nt {
     float normal;
-    float ratt;
 }Note;
 
 typedef struct ds {
     Student *student;
-    Note *notes[4][16];
+    float notes[4][16];
     float moy[4];
+    unsigned inf12:5; // nombre de module avec 12 > note >= 10
+    unsigned inf10:1; // 1 si il a au moins une note < 10
     struct ds *svt;
 }Dossier;
 
