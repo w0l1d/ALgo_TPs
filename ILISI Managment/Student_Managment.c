@@ -8,6 +8,35 @@
 #include "structures.h"
 #include "error_msg.h"
 
+#define max(a,b) ( (a > b) ? (a) : (b))
+
+float getMoyenne(Dossier *ds) {
+    float moy = 0;
+    int nbr_annee;
+    nbr_annee = ds->student->annee_univ;
+    nbr_annee += (stud->reserve)?1:0;
+    switch(nbr_annee) {
+        case 4: moy += ds->moy[3];
+        case 3: moy += ds->moy[2];
+        case 2: moy += ds->moy[1];
+        case 1: moy += ds->moy[0];
+    }
+    moy /= nbr_annee;
+    return ((float) moy);
+}
+
+
+Dossier *insertDossier(Dossier *list, Dossier *ds) {
+    if (!list)
+        return ((Dossier*) ds);
+    if(getMoyenne(ds) > getMoyenne(list)) {
+        ds->svt = list;
+        return ((Dossier*) ds);
+    }
+    list->svt = insertDossier(list->svt, ds);
+    return ((Dossier*) list);
+}
+
 Dossier *initDossier(Student *st) {
     Dossier *ds;
     ds = (Dossier*) malloc(sizeof(Dossier));
@@ -17,6 +46,9 @@ Dossier *initDossier(Student *st) {
     }
     ds->student = st;
     ds->svt = NULL;
+    ds->moy[0] = 0;
+    ds->moy[1] = 0;
+    ds->moy[2] = 0;
     return ((Dossier*)ds);
 }
 
@@ -35,10 +67,11 @@ Student* readStudent(FILE *fl) {
     Student *stud = NULL;
     char nom[30],prenom[30], cin[15], cne[15];
     unsigned int day, month, year, res, an_unv;
+
+    //STUDENT_PATTERN = "%30[^;];%30[^;];%8[A-Za-z0-9];%10[A-Za-z0-9];%d;%d;%d;%d;%d\n"
     int rst = fscanf(fl, STUDENT_PATTERN,
-           nom, prenom, cin, cne, &day,
-           &month, &year,
-           &res, &an_unv);
+                     nom, prenom, cin, cne, &day,
+                     &month, &year, &res, &an_unv);
 
     if (rst == EOF)
         return ((Student*) NULL);
@@ -57,17 +90,26 @@ Student* readStudent(FILE *fl) {
     return ((Student*)stud);
 }
 
+
+/**
+ *
+ * @param fl
+ * @return
+ */
 Dossier *readDossier(FILE *fl) {
     Student *stud = readStudent(fl);
     if (!stud)
         return ((Dossier*) NULL);
     Dossier *ds = initDossier(stud);
-    int ind = 0, //index to current Note
+    int ind, //index to current Note
+    ind2 = 0,
     i, j;
-    float n1, n2; // n1->note normal; n2->note du rattrapage
-    int nbr_notes = 16 * stud->annee_univ;
-    if (stud->reserve) nbr_notes+=16;
-    while(ind < nbr_notes) {
+    float n1, n2, moyen; // n1->note normal; n2->note du rattrapage
+    int nbr_notes = stud->annee_univ;
+    nbr_notes += (stud->reserve)?1:0;
+    read_notes:
+    moyen = ind = 0;
+    while(ind < 16) {
         fscanf(fl, "%f;",&n1);
         (n1 < 12)?
             fscanf(fl, "%f;",&n2)
@@ -76,11 +118,27 @@ Dossier *readDossier(FILE *fl) {
         i = ind / 16; // line index
         j = ind % 16; // column index
         ds->notes[i][j] = init_Note(n1, n2);
+        moyen += max(n1, n2);
         ind++;
     }
+    moyen /= 16;
+    nbr_notes--;
+    ds->moy[ind2++] = moyen;
+
     fscanf(fl, "%*[\n];");
+    if (nbr_notes)
+        goto read_notes;
+
     return ((Dossier*) ds);
 }
+
+void orgDossiers(FILE *f, Dossier *ds[3]) {
+    Dossier *tmp;
+
+    while ((tmp = readDossier(f)))
+        ds[tmp->student->annee_univ] = insertDossier(ds[tmp->student->annee_univ], tmp);
+}
+
 
 
 void readModules(FILE *f) {

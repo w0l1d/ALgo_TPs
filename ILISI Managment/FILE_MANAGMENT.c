@@ -2,8 +2,6 @@
 // Created by W0L1D on 1/21/2022.
 //
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "Student_Managment.c"
 
 

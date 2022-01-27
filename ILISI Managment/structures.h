@@ -7,13 +7,7 @@
 
 #define DELIM ';'
 
-typedef struct {
-    unsigned year:12;
-    unsigned month:4;
-    unsigned day:5;
-}Date;
 
-char *modules[3][16];
 
 const char STUDENT_PATTERN[] = "%30[^;];%30[^;];"
                                "%8[A-Za-z0-9];%10[A-Za-z0-9];"
@@ -21,6 +15,13 @@ const char STUDENT_PATTERN[] = "%30[^;];%30[^;];"
 
 const char NOTE_PATTERN[] = "%f;%f;";
 
+typedef struct {
+    unsigned year:12;
+    unsigned month:4;
+    unsigned day:5;
+}Date;
+
+char *modules[3][16];
 
 typedef struct {
     char *nom; // max 30
@@ -41,6 +42,7 @@ typedef struct nt {
 typedef struct ds {
     Student *student;
     Note *notes[4][16];
+    float moy[4];
     struct ds *svt;
 }Dossier;
 
