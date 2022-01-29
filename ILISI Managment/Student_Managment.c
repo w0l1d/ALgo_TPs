@@ -10,6 +10,18 @@
 
 #define max(a,b) ( (a > b) ? (a) : (b))
 
+//**********************************************************************************
+/***********************************************************************************
+ * Nom : float getMoyenne(Dossier *ds)
+ *             calculer la moyenne 
+ *
+ * Entree : Dossier *ds : la base qui contient les 
+ 						information des etudiants
+ *
+ * Sortie : un nombre reel : moyenne 
+ *
+ */
+
 float getMoyenne(Dossier *ds) {
     int nbr_annee;
     nbr_annee = ds->student->annee_univ;
@@ -18,9 +30,35 @@ float getMoyenne(Dossier *ds) {
     return ((float) ds->moy[nbr_annee-1]);
 }
 
+//**********************************************************************************
+/***********************************************************************************
+ * Nom : int A_Reussi(Dossier *ds)
+ *             verifier si l etudiant a reussi 
+ *				on verifiant les conditions
+ *
+ * Entree : Dossier *ds : la base qui contient les 
+ 						information des etudiants
+ *
+ * Sortie : un entier : 1 si l etudiant a reussi
+ *						0 si l etudiant a echoue
+ */
+
 int A_Reussi(Dossier *ds) {
     return (ds->inf12 < 4) && !(ds->inf10) && (getMoyenne(ds) > 12);
 }
+//**********************************************************************************
+/***********************************************************************************
+ * Nom : Dossier *insertDossier(Dossier *list, Dossier *ds)
+ *             		inserer une liste d etudiants (1 ou plusieurs)
+ 					dans une bdd on respectant l ordre de merite
+ *
+ * Entree : Dossier *ds : la base qui contient les 
+ 						information des etudiants
+ 			
+ *			Dossier *list : la liste des etudiant a inserer 
+ * Sortie : la nouvelle la base qui contient les 
+ *			information des etudiants
+ */
 
 
 Dossier *insertDossier(Dossier *list, Dossier *ds) {
@@ -49,6 +87,22 @@ Dossier *insertDossier(Dossier *list, Dossier *ds) {
     list->svt = insertDossier(list->svt, ds);
     return ((Dossier*) list);
 }
+//**********************************************************************************
+/***********************************************************************************
+ * Nom : Dossier *initDossier(Student *st)
+ *             		initialiser la cellule qui contient
+ 					les donnees d un etudiant ,ses moyens
+ 					et ses notes.
+ *
+ * Entree : Student *st : cellule de type student 
+ 						contient les donnees d un etudiant
+ 						
+ 			
+ *			
+ * Sortie : Dossier *ds : la cellule qui contient
+ *					les donnees d un etudiant ,ses moyens
+ *					et ses notes.
+ */
 
 Dossier *initDossier(Student *st) {
     Dossier *ds;
@@ -64,6 +118,18 @@ Dossier *initDossier(Student *st) {
     ds->moy[2] = 0;
     return ((Dossier*)ds);
 }
+//**********************************************************************************
+/***********************************************************************************
+ * Nom : Note *init_Note(float normal)
+ *             		initialiser la note d un etudiant
+ *
+ * Entree : float normal : la note a inserer
+ 			
+ *			
+ * Sortie : Note *nt : la note de l etudiant
+ *					
+ */
+
 
 Note *init_Note(float normal) {
     Note *nt = (Note*) malloc(sizeof(Note));
@@ -74,6 +140,18 @@ Note *init_Note(float normal) {
     nt->normal = normal;
     return ((Note*) nt);
 }
+//**********************************************************************************
+/***********************************************************************************
+ * Nom : Student* readStudent(FILE *fl)
+ *             		lire les donnees d un etudiant 
+ 					depuis le fichier 
+ *
+ * Entree : FILE *fl : le fichier qui contient
+ 						les donnees des etudiants
+ *			
+ * Sortie : Student *stud : l etudiant lu
+ *					
+ */
 
 Student* readStudent(FILE *fl) {
     Student *stud = NULL;
@@ -107,6 +185,22 @@ Student* readStudent(FILE *fl) {
  *
  * @param fl
  * @return
+ */
+//**********************************************************************************
+/***********************************************************************************
+ * Nom : Dossier *readDossier(FILE *fl)
+ *             		lire tous les informations d un 
+ 					etudiant depuis le fichier fl
+					et calculer ses moyens 
+					  
+ *
+ * Entree : FILE *fl : le fichier qui contient
+ 						les donnees des etudiants
+ *			
+ * Sortie : Dossier *ds : la celulle de type Dossier
+ *							qui contients tous les info
+ *							de l etudiant
+ *					
  */
 Dossier *readDossier(FILE *fl) {
     Student *stud = readStudent(fl);
@@ -146,7 +240,21 @@ Dossier *readDossier(FILE *fl) {
 
     return ((Dossier*) ds);
 }
-
+//**********************************************************************************
+/***********************************************************************************
+ * Nom : void orgDossiers(FILE *f, Dossier *ds[3])
+ *             		lire depuis le fichier les donnees des
+ 					etudiants et les organisee selon les promotion
+					  
+ *
+ * Entree : FILE *fl : le fichier qui contient
+ 						les donnees des etudiants
+ 			Dossier *ds[3]: un tableau de 3 cases de listes
+			 				chaque case represente une promotion			
+ *			
+ * Sortie : rien
+ *					
+ */
 void orgDossiers(FILE *f, Dossier *ds[3]) {
     Dossier *tmp;
 
@@ -154,7 +262,18 @@ void orgDossiers(FILE *f, Dossier *ds[3]) {
         ds[tmp->student->annee_univ-1] = insertDossier(ds[tmp->student->annee_univ-1], tmp);
 }
 
-
+//**********************************************************************************
+/***********************************************************************************
+ * Nom : void readModules(FILE *f)
+ *             		lire lesnoms des modules depuis un fichier
+ *					  
+ *
+ * Entree : FILE *fl : le fichier qui contient les
+ *					 noms des modules des 3 annees					
+ *			
+ * Sortie : rien
+ *					
+ */
 
 void readModules(FILE *f) {
 
