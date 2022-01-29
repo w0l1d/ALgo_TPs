@@ -5,17 +5,6 @@
 #include "Student_Managment.c"
 
 
-void print_student(Student *std) {
-    printf("\nStudent info \n"
-           "nom = %s\n"
-           "prenom = %s\n"
-           "cin = %s\n"
-           "cne = %s\n"
-           "reserve = %x\n"
-           "annee universitaire = %x\n",
-           std->nom, std->prenom, std->cin,
-           std->cne, std->reserve, std->annee_univ);
-}
 
 
 void print_dossier(Dossier *doss) {

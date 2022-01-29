@@ -5,10 +5,24 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <conio.h>
 #include "structures.h"
 #include "error_msg.h"
 
 #define max(a,b) ( (a > b) ? (a) : (b))
+
+
+void print_student(Student *std) {
+    printf(
+            "nom = %s, "
+            "prenom = %s, "
+            "cin = %s, "
+            "cne = %s, "
+            "reserve = %x, "
+            "annee universitaire = %x\n",
+            std->nom, std->prenom, std->cin,
+            std->cne, std->reserve, std->annee_univ);
+}
 
 float getMoyenne(Dossier *ds) {
     int nbr_annee;
@@ -150,8 +164,8 @@ Dossier *readDossier(FILE *fl) {
 void orgDossiers(FILE *f, Dossier *ds[3]) {
     Dossier *tmp;
 
-    while ((tmp = readDossier(f)))
-        ds[tmp->student->annee_univ-1] = insertDossier(ds[tmp->student->annee_univ-1], tmp);
+    while ((tmp = readDossier(f)) != NULL)
+        ds[(int)tmp->student->annee_univ-1] = insertDossier(ds[(int)tmp->student->annee_univ-1], tmp);
 }
 
 
@@ -184,18 +198,123 @@ void readModules(FILE *f) {
 }
 
 
-void Menu() {
+void aff_Menu_Statis() {
     printf(
             "\n******************************************\n"
             "***********Statistiques Menu**************\n"
             "******************************************\n"
-            "1-> tous les etudiants"
-            "2-> les etudiant ayant reussi"
-            "3-> les etudiant ayant des notes entre 10 et 12"
-            "4-> les etudiant ayant des notes < 10"
-            "5-> les etudiant n'ayant pas des notes < 10, mais ont echoues"
-            );
+            "1-> les etudiants ayant reussi\n"
+            "2-> les etudiants ayant des notes entre 10 et 12\n"
+            "3-> les etudiants ayant des notes < 10\n"
+            "4-> les etudiants n'ayant pas des notes < 10, mais ont echoues\n"
+            "0-> Retourner\n"
+    );
+}
+void aff_Main_Menu() {
+    printf(
+            "\n******************************************\n"
+            "***********Main Menu**************\n"
+            "******************************************\n"
+            "1-> Statistique par Annee/Promotion\n"
+            "2-> Statistique par Module\n"
+            "0-> Retourner\n"
+    );
+}
 
+void aff_etud_reussi(Dossier *ds) {
+    printf("\nLes etudiants ayant reussi\n");
+    while(ds) {
+        if (A_Reussi(ds))
+            print_student(ds->student);
+        ds = ds->svt;
+    }
+}
+void aff_etud_10_12(Dossier *ds) {
+    printf("\nLes etudiants ayant des note entre 10 et 12\n");
+    while(ds) {
+        if (ds->inf12)
+            print_student(ds->student);
+        ds = ds->svt;
+    }
+}
+void aff_etud_10(Dossier *ds) {
+    printf("\nLes etudiants ayant des notes inferieures 10\n");
+    while(ds) {
+        if (ds->inf10)
+            print_student(ds->student);
+        ds = ds->svt;
+    }
+}
+void aff_etud_not_10_not_reussi(Dossier *ds) {
+    printf("\nles etudiants n'ayant pas des notes < 10, mais ont echoues\n");
+    while(ds) {
+        if (!(ds->inf10) && !A_Reussi(ds))
+            print_student(ds->student);
+        ds = ds->svt;
+    }
+}
+
+void menu_par_annee(Dossier *ds) {
+    int choix;
+
+    if (!ds) {
+        printf("\nListe est vide\n");
+        getch();
+        return;
+    }
+    do {
+        choix = 0;
+        aff_Menu_Statis();
+        printf("\n\n>>>  ");
+        scanf("%d", &choix);
+        switch(choix) {
+            case 1:
+                aff_etud_reussi(ds);
+                break;
+            case 2:
+                aff_etud_10_12(ds);
+                break;
+            case 3:
+                aff_etud_10(ds);
+                break;
+            case 4:
+                aff_etud_not_10_not_reussi(ds);
+                break;
+            case 0:
+                return;
+            default:
+                printf("\nErreur : Choix Invalide\n");
+        }
+        getch();
+    }while(choix);
+}
+
+void main_menu(Dossier *ds[3]) {
+    int choix, tmp;
+    do {
+        choix = 0;
+        aff_Main_Menu();
+        printf("\n\n>>>  ");
+        scanf("%d", &choix);
+        switch(choix) {
+            case 1:
+                printf("\nEntrer la promotion [1,2 ou 3] : ");
+                scanf("%d", &tmp);
+                while((tmp < 1) || (3 > tmp)) {
+                    printf("\nRentrer une promotion [1 ou 2 ou 3] : ");
+                    scanf("%d", &tmp);
+                }
+                menu_par_annee(ds[tmp]);
+                break;
+            case 2:
+                break;
+            case 0:
+                break;
+            default:
+                printf("\nErreur: Choix invalide\n");
+        }
+        getch();
+    }while(choix);
 
 
 }
