@@ -69,7 +69,7 @@ int A_Reussi(Dossier *ds) {
 }
 //**********************************************************************************
 /***********************************************************************************
- * Nom : Dossier *insertDossier(Dossier *list, Dossier *ds)
+ * Nom : Dossier *insertDossier_Merite(Dossier *list, Dossier *ds)
  *             		inserer une liste d etudiants (1 ou plusieurs)
  					dans une bdd on respectant l ordre de merite
  *
@@ -80,7 +80,7 @@ int A_Reussi(Dossier *ds) {
  * Sortie : la nouvelle la base qui contient les
  *			information des etudiants
  */
-Dossier *insertDossier(Dossier *list, Dossier *ds) {
+Dossier *insertDossier_Merite(Dossier *list, Dossier *ds) {
     if (!list)
         return ((Dossier*) ds);
     // X est l'etudiant a insere
@@ -91,10 +91,10 @@ Dossier *insertDossier(Dossier *list, Dossier *ds) {
 //          || (!A_Reussi(ds) && !A_Reussi(list) && (getMoyenne(ds) >= 12) && (getMoyenne(list) >= 12) && !ds->inf10))
     if(
             (A_Reussi(ds) && ((getMoyenne(ds) > getMoyenne(list)) || !A_Reussi(list)))
-       || (!A_Reussi(ds)
-            && !A_Reussi(list)
-            && (getMoyenne(ds) >= 12)
-            && ((getMoyenne(list) < 12)) || ((getMoyenne(list) >= 12) && !ds->inf10)
+            || (!A_Reussi(ds)
+                && !A_Reussi(list)
+                && (getMoyenne(ds) >= 12)
+                && ((getMoyenne(list) < 12)) || ((getMoyenne(list) >= 12) && !ds->inf10)
             )
             )
     {
@@ -103,9 +103,44 @@ Dossier *insertDossier(Dossier *list, Dossier *ds) {
         return ((Dossier *) ds);
 
     }
-    list->svt = insertDossier(list->svt, ds);
+    list->svt = insertDossier_Merite(list->svt, ds);
     return ((Dossier*) list);
 }
+
+//**********************************************************************************
+/***********************************************************************************
+ * Nom : Dossier *insertDossier_Alpha(Dossier *list, Dossier *ds)
+ *             		inserer une liste d etudiants (1 ou plusieurs)
+ 					dans une bdd on respectant
+ 					l'ordre alphabetique du nom puis le prenom
+ *
+ * Entree : Dossier *ds : la base qui contient les
+ 						informations des etudiants
+
+ *			Dossier *list : la liste des etudiant a inserer
+ * Sortie : la nouvelle la base qui contient les
+ *			informations des etudiants
+ */
+Dossier *insertDossier_Alpha(Dossier *list, Dossier *ds) {
+    if (!list)
+        return ((Dossier*) ds);
+
+    float tmp = strcmp(ds->student->nom, list->student->nom);
+    if(tmp <= 0)
+    {
+        if (!tmp) {
+            tmp = strcmp(ds->student->prenom, list->student->prenom);
+            if (tmp > 0)
+                goto skip;
+        }
+        ds->svt = list;
+        return ((Dossier *) ds);
+    }
+    skip:
+    list->svt = insertDossier_Merite(list->svt, ds);
+    return ((Dossier*) list);
+}
+
 //**********************************************************************************
 /***********************************************************************************
  * Nom : Dossier *initDossier(Student *st)
@@ -259,22 +294,20 @@ Dossier *readDossier(FILE *fl) {
 /***********************************************************************************
  * Nom : void orgDossiers(FILE *f, Dossier *ds[3])
  *             		lire depuis le fichier les donnees des
- 					etudiants et les organisee selon les promotion
-
+ *             		etudiants et les organisee selon les promotion
  *
  * Entree : FILE *fl : le fichier qui contient
- 						les donnees des etudiants
- 			Dossier *ds[3]: un tableau de 3 cases de listes
-			 				chaque case represente une promotion
+ *						les donnees des etudiants
+ *			Dossier *ds[3]: un tableau de 3 cases de listes
+ *			chaque case represente une promotion
  *
  * Sortie : rien
- *
  */
 void orgDossiers(FILE *f, Dossier *ds[3]) {
     Dossier *tmp;
 
     while ((tmp = readDossier(f)) != NULL)
-        ds[(int)tmp->student->annee_univ-1] = insertDossier(ds[(int)tmp->student->annee_univ-1], tmp);
+        ds[(int)tmp->student->annee_univ-1] = insertDossier_Merite(ds[(int) tmp->student->annee_univ - 1], tmp);
 }
 
 
