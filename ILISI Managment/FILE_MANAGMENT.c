@@ -27,13 +27,23 @@ void print_dossier(Dossier *doss) {
         }
     }
 }
+
+
 int main() {
     FILE *f;
     f=fopen("P:\\Study\\ILISI\\S1\\ALgo\\practice\\ILISI Managment\\students.txt","r");
-    Dossier *doss;
+    int ord;
+    Dossier *doss[3];
+    printf("\nEntrer l'ordre de tri des etudiants (0:alphabetique, 1:merite) : ");
+    scanf("%d", &ord);
+    while ((ord != 0) && (ord !=1)) {
+        printf("\n0 -> alphabetique\n1 -> merite\nRentrer l'ordre de tri des etudiants : ");
+        scanf("%d", &ord);
+    }
 
-    while ((doss = readDossier(f)))
-        print_dossier(doss);
+    (ord)? orgDossiers_merite(f, doss):orgDossiers_alpha(f, doss);
+
+    main_menu(doss);
     fclose(f);
     return 0;
 }

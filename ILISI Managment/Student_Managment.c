@@ -290,7 +290,7 @@ Dossier *readDossier(FILE *fl) {
 }
 //**********************************************************************************
 /***********************************************************************************
- * Nom : void orgDossiers(FILE *f, Dossier *ds[3])
+ * Nom : void orgDossiers_merite(FILE *f, Dossier *ds[3])
  *             		lire depuis le fichier les donnees des
  *             		etudiants et les organisee selon les promotion
  *
@@ -301,11 +301,31 @@ Dossier *readDossier(FILE *fl) {
  *
  * Sortie : rien
  */
-void orgDossiers(FILE *f, Dossier *ds[3]) {
+void orgDossiers_merite(FILE *f, Dossier *ds[3]) {
     Dossier *tmp;
 
     while ((tmp = readDossier(f)) != NULL)
         ds[(int)tmp->student->annee_univ-1] = insertDossier_Merite(ds[(int) tmp->student->annee_univ - 1], tmp);
+}
+
+//**********************************************************************************
+/***********************************************************************************
+ * Nom : void orgDossiers_alpha(FILE *f, Dossier *ds[3])
+ *             		lire depuis le fichier les donnees des
+ *             		etudiants et les organisee selon les promotion
+ *
+ * Entree : FILE *fl : le fichier qui contient
+ *						les donnees des etudiants
+ *			Dossier *ds[3]: un tableau de 3 cases de listes
+ *			chaque case represente une promotion
+ *
+ * Sortie : rien
+ */
+void orgDossiers_alpha(FILE *f, Dossier *ds[3]) {
+    Dossier *tmp;
+
+    while ((tmp = readDossier(f)) != NULL)
+        ds[(int)tmp->student->annee_univ-1] = insertDossier_Alpha(ds[(int) tmp->student->annee_univ - 1], tmp);
 }
 
 
