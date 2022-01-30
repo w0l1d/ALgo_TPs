@@ -32,7 +32,14 @@ float getMoyenne(Dossier *ds) {
 }
 
 
-
+/***********************************************************************************
+ * Nom : void print_student(Student *std)
+ *             affiche les donnees d'un etudiant
+ *
+ * Entree : Student *std; etudiant a afficher
+ *
+ * Sortie : rien
+ */
 void print_student(Student *std) {
     printf(
             "nom = %s, "
@@ -73,8 +80,6 @@ int A_Reussi(Dossier *ds) {
  * Sortie : la nouvelle la base qui contient les
  *			information des etudiants
  */
-
-
 Dossier *insertDossier(Dossier *list, Dossier *ds) {
     if (!list)
         return ((Dossier*) ds);
@@ -143,8 +148,6 @@ Dossier *initDossier(Student *st) {
  * Sortie : Note *nt : la note de l etudiant
  *
  */
-
-
 Note *init_Note(float normal) {
     Note *nt = (Note*) malloc(sizeof(Note));
     if (!nt) {
@@ -166,7 +169,6 @@ Note *init_Note(float normal) {
  * Sortie : Student *stud : l etudiant lu
  *
  */
-
 Student* readStudent(FILE *fl) {
     Student *stud = NULL;
     char nom[30],prenom[30], cin[15], cne[15];
@@ -194,12 +196,11 @@ Student* readStudent(FILE *fl) {
     return ((Student*)stud);
 }
 
+int get_annee_actuel(Student *std) {
+    return ((int) std->annee_univ - (std->reserve)?0:1);
+}
 
-/**
- *
- * @param fl
- * @return
- */
+
 //**********************************************************************************
 /***********************************************************************************
  * Nom : Dossier *readDossier(FILE *fl)
@@ -276,6 +277,7 @@ void orgDossiers(FILE *f, Dossier *ds[3]) {
         ds[(int)tmp->student->annee_univ-1] = insertDossier(ds[(int)tmp->student->annee_univ-1], tmp);
 }
 
+
 //**********************************************************************************
 /***********************************************************************************
  * Nom : void readModules(FILE *f)
@@ -288,7 +290,6 @@ void orgDossiers(FILE *f, Dossier *ds[3]) {
  * Sortie : rien
  *
  */
-
 void readModules(FILE *f) {
 
     int modIndex = 0, modsize = 0;
@@ -317,6 +318,13 @@ void readModules(FILE *f) {
 }
 
 
+/***********************************************************************************
+ * Nom : void aff_Menu_Statis()
+ *       afficher le menu des statistiques disponible
+ *
+ * Entree : rien
+ * Sortie : rien
+ */
 void aff_Menu_Statis() {
     printf(
             "\n******************************************\n"
@@ -329,6 +337,50 @@ void aff_Menu_Statis() {
             "0-> Retourner\n"
     );
 }
+
+
+/***********************************************************************************
+ * Nom : void aff_etud_reussi(Dossier *ds)
+ *       afficher les etudiants qui ont reussi
+ *
+ * Entree : Dossier *ds; liste des dossiers des etudiants
+ * Sortie : rien
+ */
+void aff_etud_reussi(Dossier *ds) {
+    printf("\nLes etudiants ayant reussi\n");
+    while(ds) {
+        if (A_Reussi(ds))
+            print_student(ds->student);
+        ds = ds->svt;
+    }
+}
+
+/***********************************************************************************
+ * Nom : void aff_etud_reussi_module(Dossier *ds)
+ *       afficher les etudiants qui ont reussi dans un module
+ *
+ * Entree : Dossier *ds; liste des dossiers des etudiants
+ *          int nmod; numero de module
+ * Sortie : rien
+ */
+void aff_etud_reussi_module(Dossier *ds, int nmod) {
+    printf("\nLes etudiants ayant reussi\n");
+    while(ds) {
+        if (ds->notes[get_annee_actuel(ds->student)][nmod] >= 12);
+            print_student(ds->student);
+        ds = ds->svt;
+    }
+}
+
+
+
+/***********************************************************************************
+ * Nom : void aff_Main_Menu()
+ *       afficher le menu pricipal
+ *
+ * Entree : rien
+ * Sortie : rien
+ */
 void aff_Main_Menu() {
     printf(
             "\n******************************************\n"
@@ -340,14 +392,16 @@ void aff_Main_Menu() {
     );
 }
 
-void aff_etud_reussi(Dossier *ds) {
-    printf("\nLes etudiants ayant reussi\n");
-    while(ds) {
-        if (A_Reussi(ds))
-            print_student(ds->student);
-        ds = ds->svt;
-    }
-}
+
+
+/***********************************************************************************
+ * Nom : void aff_etud_10_12(Dossier *ds)
+ *       afficher les etudiants ayant une note entre 10 et 12 dans un module
+ *
+ * Entree : Dossier *ds; liste des dossiers des etudiants
+ *
+ * Sortie : rien
+ */
 void aff_etud_10_12(Dossier *ds) {
     printf("\nLes etudiants ayant des note entre 10 et 12\n");
     while(ds) {
@@ -356,6 +410,74 @@ void aff_etud_10_12(Dossier *ds) {
         ds = ds->svt;
     }
 }
+
+/***********************************************************************************
+ * Nom : void aff_etud_10_12_module(Dossier *ds)
+ *       afficher les etudiants ayant une note entre 10 et 12
+ *
+ * Entree : Dossier *ds; liste des dossiers des etudiants
+ *          int nmod; numero de module
+ * Sortie : rien
+ */
+void aff_etud_10_12_module(Dossier *ds, int nmod) {
+    float tmp;
+    printf("\nLes etudiants ayant des note entre 10 et 12\n");
+    while(ds) {
+        tmp = ds->notes[get_annee_actuel(ds->student)][nmod];
+        if (( 10 >= tmp) && (tmp < 12))
+            print_student(ds->student);
+        ds = ds->svt;
+    }
+}
+
+/***********************************************************************************
+ * Nom : void aff_etud_10_module(Dossier *ds)
+ *       afficher les etudiants ayant une note inferieure a 10
+ *
+ * Entree : Dossier *ds; liste des dossiers des etudiants
+ *          int nmod; numero de module
+ * Sortie : rien
+ */
+void aff_etud_10_module(Dossier *ds, int nmod) {
+    float tmp;
+    printf("\nLes etudiants ayant des note entre 10 et 12\n");
+    while(ds) {
+        tmp = ds->notes[get_annee_actuel(ds->student)][nmod];
+        if (10 > tmp)
+            print_student(ds->student);
+        ds = ds->svt;
+    }
+}
+
+
+/***********************************************************************************
+ * Nom : aff_etud_not_10_not_reussi_module(Dossier *ds)
+ *       afficher les etudiants ayant
+ *       qui n'ont pas une note inferieure a 10 dans un module
+ *       mais qui n'ont pas reussi
+ *
+ * Entree : Dossier *ds; liste des dossiers des etudiants
+ *          int nmod; numero de module
+ * Sortie : rien
+ */
+void aff_etud_not_10_not_reussi_module(Dossier *ds, int nmod) {
+    float tmp;
+    printf("\nLes etudiants ayant des note entre 10 et 12\n");
+    while(ds) {
+        tmp = ds->notes[get_annee_actuel(ds->student)][nmod];
+        if ((tmp > 10) && !A_Reussi(ds))
+            print_student(ds->student);
+        ds = ds->svt;
+    }
+}
+
+/***********************************************************************************
+ * Nom : void aff_etud_10(Dossier *ds)
+ *       afficher les etudiants ayant une note inferieure a 10
+ *
+ * Entree : Dossier *ds; liste des dossiers des etudiants
+ * Sortie : rien
+ */
 void aff_etud_10(Dossier *ds) {
     printf("\nLes etudiants ayant des notes inferieures 10\n");
     while(ds) {
@@ -364,6 +486,18 @@ void aff_etud_10(Dossier *ds) {
         ds = ds->svt;
     }
 }
+
+
+
+/***********************************************************************************
+ * Nom : void aff_etud_not_10_not_reussi(Dossier *ds)
+ *       afficher les etudiants ayant
+ *       qui n'ont pas une note inferieure a 10
+ *       mais qui n'ont pas reussi
+ *
+ * Entree : Dossier *ds; liste des dossiers des etudiants
+ * Sortie : rien
+ */
 void aff_etud_not_10_not_reussi(Dossier *ds) {
     printf("\nles etudiants n'ayant pas des notes < 10, mais ont echoues\n");
     while(ds) {
@@ -373,6 +507,13 @@ void aff_etud_not_10_not_reussi(Dossier *ds) {
     }
 }
 
+/***********************************************************************************
+ * Nom : void menu_par_annee(Dossier *ds)
+ *       traitement des etudiant par annee
+ *
+ * Entree : Dossier *ds; liste des dossiers des etudiants
+ * Sortie : rien
+ */
 void menu_par_annee(Dossier *ds) {
     int choix;
 
@@ -408,8 +549,61 @@ void menu_par_annee(Dossier *ds) {
     }while(choix);
 }
 
+/***********************************************************************************
+ * Nom : void menu_par_module(Dossier *ds, int nmod)
+ *       traitement des etudiant par annee
+ *
+ * Entree : Dossier *ds; liste des dossiers des etudiants
+ *          int nmod; numero du module
+ * Sortie : rien
+ */
+void menu_par_module(Dossier *ds, int nmod) {
+    int choix;
+
+    if (!ds) {
+        printf("\nListe est vide\n");
+        getch();
+        return;
+    }
+    do {
+        choix = 0;
+        aff_Menu_Statis();
+        printf("\n\n>>>  ");
+        scanf("%d", &choix);
+        switch(choix) {
+            case 1:
+                aff_etud_reussi_module(ds, nmod);
+                break;
+            case 2:
+                aff_etud_10_12_module(ds, nmod);
+                break;
+            case 3:
+                aff_etud_10_module(ds, nmod);
+                break;
+            case 4:
+                aff_etud_not_10_not_reussi_module(ds, nmod);
+                break;
+            case 0:
+                return;
+            default:
+                printf("\nErreur : Choix Invalide\n");
+        }
+        getch();
+    }while(choix);
+}
+
+
+
+/***********************************************************************************
+ * Nom : void main_menu(Dossier *ds[3])
+ *       choisir le traitement des etudiant
+ *       soit par anne ou par module
+ *
+ * Entree : Dossier *ds[3]; les listes des etudiants de 3 promotions
+ * Sortie : rien
+ */
 void main_menu(Dossier *ds[3]) {
-    int choix, tmp;
+    int choix, tmp, tmp2;
     do {
         choix = 0;
         aff_Main_Menu();
@@ -426,6 +620,21 @@ void main_menu(Dossier *ds[3]) {
                 menu_par_annee(ds[tmp]);
                 break;
             case 2:
+                printf("\nEntrer l'annee du module [1,2 ou 3] : ");
+                scanf("%d", &tmp);
+                while((tmp < 1) || (3 > tmp)) {
+                    printf("\nRentrer l'annee du module [1 ou 2 ou 3] : ");
+                    scanf("%d", &tmp);
+                }
+
+                printf("\nEntrer le numero du module [1-16] : ");
+                scanf("%d", &tmp2);
+                while((tmp2 < 1) || (16 > tmp2)) {
+                    printf("\nRentrer le numero du module (entre 1 et 16) : ");
+                    scanf("%d", &tmp2);
+                }
+
+                menu_par_module(ds[tmp], tmp2-1);
                 break;
             case 0:
                 break;
