@@ -5,6 +5,7 @@
 #include "Student_Managment.c"
 
 
+
 void print_dossier(Dossier *doss) {
     printf("\nDossier info \n");
     print_student(doss->student);
@@ -28,10 +29,20 @@ void print_dossier(Dossier *doss) {
 
 
 int main() {
-    FILE *f;
-    f=fopen("P:\\Study\\ILISI\\S1\\ALgo\\practice\\ILISI Managment\\students.txt","r");
+    FILE *students_File, *modules_File;
+    students_File=fopen("P:\\Study\\ILISI\\S1\\ALgo"
+                        "\\practice\\ILISI Managment\\students.txt",
+                        "r");
+    modules_File=fopen("P:\\Study\\ILISI\\S1\\ALgo\\"
+                       "practice\\ILISI Managment\\modules.txt",
+                       "r");
+
     int ord;
     Dossier *doss[3] = {NULL, NULL, NULL};
+    char *modules[3][16];
+    readModules(modules_File, modules);
+    fclose(modules_File);
+
     printf("\nEntrer l'ordre de tri des etudiants (0:alphabetique, 1:merite) : ");
     scanf("%d", &ord);
     while ((ord != 0) && (ord !=1)) {
@@ -39,10 +50,15 @@ int main() {
         scanf("%d", &ord);
     }
 
-    (ord)? orgDossiers_merite(f, doss):orgDossiers_alpha(f, doss);
+    (ord)?
+        orgDossiers_merite(students_File, doss)
+    :
+        orgDossiers_alpha(students_File, doss);
 
-    main_menu(doss);
-    fclose(f);
+    fclose(students_File);
+
+    main_menu(doss, modules);
+
     return 0;
 }
 

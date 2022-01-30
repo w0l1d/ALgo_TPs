@@ -31,6 +31,24 @@ float getMoyenne(Dossier *ds) {
     return ((float) ds->moy[nbr_annee-1]);
 }
 
+/***********************************************************************************
+ * Nom : void print_modules(char *modules[3][16])
+ *             affiche les modules
+ *
+ * Entree : char *modules[3][16]; les listes des modules
+ *
+ * Sortie : rien
+ */
+void print_modules(char *modules[3][16]) {
+    int i,j;
+
+    for (i = 0; i < 3; ++i) {
+        printf("\nModule de l'annee %d : \n", i+1);
+        for (j = 0; j < 16; ++j)
+            printf("module %d -> %s\n", j+1, modules[i][j]);
+    }
+}
+
 
 /***********************************************************************************
  * Nom : void print_student(Student *std)
@@ -332,8 +350,7 @@ void orgDossiers_alpha(FILE *f, Dossier *ds[3]) {
 //**********************************************************************************
 /***********************************************************************************
  * Nom : void readModules(FILE *f)
- *             		lire lesnoms des modules depuis un fichier
- *
+ *             		lire les noms des modules depuis un fichier
  *
  * Entree : FILE *fl : le fichier qui contient les
  *					 noms des modules des 3 annees
@@ -341,7 +358,7 @@ void orgDossiers_alpha(FILE *f, Dossier *ds[3]) {
  * Sortie : rien
  *
  */
-void readModules(FILE *f) {
+void readModules(FILE *f, char *modules[3][16]) {
 
     int modIndex = 0, modsize = 0;
     int i,j;
@@ -439,6 +456,7 @@ void aff_Main_Menu() {
             "******************************************\n"
             "1-> Statistique par Annee/Promotion\n"
             "2-> Statistique par Module\n"
+            "3-> Afficher les modules\n"
             "0-> Retourner\n"
     );
 }
@@ -653,8 +671,9 @@ void menu_par_module(Dossier *ds, int nmod) {
  * Entree : Dossier *ds[3]; les listes des etudiants de 3 promotions
  * Sortie : rien
  */
-void main_menu(Dossier *ds[3]) {
+void main_menu(Dossier *ds[3], char *modules[3][16]) {
     int choix, tmp, tmp2;
+
     do {
         choix = 0;
         aff_Main_Menu();
@@ -686,6 +705,9 @@ void main_menu(Dossier *ds[3]) {
                 }
 
                 menu_par_module(ds[tmp-1], tmp2-1);
+                break;
+            case 3 :
+                print_modules(modules);
                 break;
             case 0:
                 break;

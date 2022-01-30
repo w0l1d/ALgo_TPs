@@ -21,7 +21,7 @@ typedef struct {
     unsigned day:5;
 }Date;
 
-char *modules[3][16];
+
 
 typedef struct {
     char *nom; // max 30
