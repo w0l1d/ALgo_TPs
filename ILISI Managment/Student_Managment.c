@@ -668,7 +668,7 @@ void main_menu(Dossier *ds[3]) {
                     printf("\nRentrer une promotion [1 ou 2 ou 3] : ");
                     scanf("%d", &tmp);
                 }
-                menu_par_annee(ds[tmp]);
+                menu_par_annee(ds[tmp-1]);
                 break;
             case 2:
                 printf("\nEntrer l'annee du module [1,2 ou 3] : ");
@@ -685,7 +685,7 @@ void main_menu(Dossier *ds[3]) {
                     scanf("%d", &tmp2);
                 }
 
-                menu_par_module(ds[tmp], tmp2-1);
+                menu_par_module(ds[tmp-1], tmp2-1);
                 break;
             case 0:
                 break;
