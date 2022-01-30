@@ -5,8 +5,6 @@
 #include "Student_Managment.c"
 
 
-
-
 void print_dossier(Dossier *doss) {
     printf("\nDossier info \n");
     print_student(doss->student);
@@ -33,7 +31,7 @@ int main() {
     FILE *f;
     f=fopen("P:\\Study\\ILISI\\S1\\ALgo\\practice\\ILISI Managment\\students.txt","r");
     int ord;
-    Dossier *doss[3];
+    Dossier *doss[3] = {NULL, NULL, NULL};
     printf("\nEntrer l'ordre de tri des etudiants (0:alphabetique, 1:merite) : ");
     scanf("%d", &ord);
     while ((ord != 0) && (ord !=1)) {

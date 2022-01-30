@@ -664,7 +664,7 @@ void main_menu(Dossier *ds[3]) {
             case 1:
                 printf("\nEntrer la promotion [1,2 ou 3] : ");
                 scanf("%d", &tmp);
-                while((tmp < 1) || (3 > tmp)) {
+                while((tmp < 1) || (3 < tmp)) {
                     printf("\nRentrer une promotion [1 ou 2 ou 3] : ");
                     scanf("%d", &tmp);
                 }
@@ -673,14 +673,14 @@ void main_menu(Dossier *ds[3]) {
             case 2:
                 printf("\nEntrer l'annee du module [1,2 ou 3] : ");
                 scanf("%d", &tmp);
-                while((tmp < 1) || (3 > tmp)) {
+                while((tmp < 1) || (3 < tmp)) {
                     printf("\nRentrer l'annee du module [1 ou 2 ou 3] : ");
                     scanf("%d", &tmp);
                 }
 
                 printf("\nEntrer le numero du module [1-16] : ");
                 scanf("%d", &tmp2);
-                while((tmp2 < 1) || (16 > tmp2)) {
+                while((tmp2 < 1) || (16 < tmp2)) {
                     printf("\nRentrer le numero du module (entre 1 et 16) : ");
                     scanf("%d", &tmp2);
                 }
