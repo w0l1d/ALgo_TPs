@@ -98,10 +98,8 @@ Dossier *insertDossier_Merite(Dossier *list, Dossier *ds) {
             )
             )
     {
-
         ds->svt = list;
         return ((Dossier *) ds);
-
     }
     list->svt = insertDossier_Merite(list->svt, ds);
     return ((Dossier*) list);
