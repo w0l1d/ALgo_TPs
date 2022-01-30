@@ -9,7 +9,6 @@
 #include "structures.h"
 #include "error_msg.h"
 
-#define max(a,b) ( (a > b) ? (a) : (b))
 
 //**********************************************************************************
 /***********************************************************************************
@@ -188,26 +187,7 @@ Dossier *initDossier(Student *st) {
     ds->moy[2] = 0;
     return ((Dossier*)ds);
 }
-//**********************************************************************************
-/***********************************************************************************
- * Nom : Note *init_Note(float normal)
- *             		initialiser la note d un etudiant
- *
- * Entree : float normal : la note a inserer
 
- *
- * Sortie : Note *nt : la note de l etudiant
- *
- */
-Note *init_Note(float normal) {
-    Note *nt = (Note*) malloc(sizeof(Note));
-    if (!nt) {
-        printf(ERROR_ALL_MEM_NOTE);
-        exit(-1);
-    }
-    nt->normal = normal;
-    return ((Note*) nt);
-}
 //**********************************************************************************
 /***********************************************************************************
  * Nom : Student* readStudent(FILE *fl)
@@ -509,7 +489,7 @@ void aff_etud_10_12_module(Dossier *ds, int nmod) {
  */
 void aff_etud_10_module(Dossier *ds, int nmod) {
     float tmp;
-    printf("\nLes etudiants ayant des note entre 10 et 12\n");
+    printf("\nLes etudiants ayant des notes inferieures 10\n");
     while(ds) {
         tmp = ds->notes[get_annee_actuel(ds->student)][nmod];
         if (10 > tmp)
@@ -531,7 +511,7 @@ void aff_etud_10_module(Dossier *ds, int nmod) {
  */
 void aff_etud_not_10_not_reussi_module(Dossier *ds, int nmod) {
     float tmp;
-    printf("\nLes etudiants ayant des note entre 10 et 12\n");
+    printf("\nles etudiants n'ayant pas des notes < 10, mais ont echoues\n");
     while(ds) {
         tmp = ds->notes[get_annee_actuel(ds->student)][nmod];
         if ((tmp > 10) && !A_Reussi(ds))

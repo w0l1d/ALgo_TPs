@@ -13,7 +13,6 @@ const char STUDENT_PATTERN[] = "%30[^;];%30[^;];"
                                "%8[A-Za-z0-9];%10[A-Za-z0-9];"
                                "%d;%d;%d;%d;%d\n";
 
-const char NOTE_PATTERN[] = "%f;%f;";
 
 typedef struct {
     unsigned year:12;
@@ -34,9 +33,6 @@ typedef struct {
 }Student;
 
 
-typedef struct nt {
-    float normal;
-}Note;
 
 typedef struct ds {
     Student *student;
